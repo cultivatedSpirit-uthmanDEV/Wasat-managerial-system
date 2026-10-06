@@ -1,0 +1,355 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Create Order</h1>
+        <p>Create a new customer order and assign it to a worker.</p>
+    </div>
+</div>
+
+<div class="form-card">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            <label for="{{ form.customer.id_for_label }}">
+                Customer
+            </label>
+            {{ form.customer }}
+
+            {% if form.customer.errors %}
+                <div class="form-error">
+                    {{ form.customer.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">
+                Description
+            </label>
+            {{ form.description }}
+
+            {% if form.description.errors %}
+                <div class="form-error">
+                    {{ form.description.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label for="{{ form.quantity.id_for_label }}">
+                    Quantity
+                </label>
+                {{ form.quantity }}
+
+                {% if form.quantity.errors %}
+                    <div class="form-error">
+                        {{ form.quantity.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.price.id_for_label }}">
+                    Price
+                </label>
+                {{ form.price }}
+
+                {% if form.price.errors %}
+                    <div class="form-error">
+                        {{ form.price.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label for="{{ form.expected_completion_date.id_for_label }}">
+                    Expected Completion Date
+                </label>
+                {{ form.expected_completion_date }}
+
+                {% if form.expected_completion_date.errors %}
+                    <div class="form-error">
+                        {{ form.expected_completion_date.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.assigned_workers.id_for_label }}">
+                    Assigned Worker
+                </label>
+                {{ form.assigned_workers }}
+
+                {% if form.assigned_workers.errors %}
+                    <div class="form-error">
+                        {{ form.assigned_workers.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'order-list' %}" class="btn btn-secondary">
+                Cancel
+            </a>
+
+            <button type="submit" class="btn btn-primary">
+                Create Order
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+
+
+
+
+
+
+<style>
+    .page-header {
+        margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+        margin: 0 0 6px;
+        color: #2b2118;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .page-header p {
+        margin: 0;
+        color: #7a7066;
+        font-size: 15px;
+    }
+
+    .form-card {
+        max-width: 850px;
+        background: #ffffff;
+        border: 1px solid #e8dfd4;
+        border-radius: 14px;
+        padding: 32px;
+        box-shadow: 0 4px 18px rgba(43, 33, 24, 0.05);
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+        flex: 1;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2b2118;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* All form fields */
+    /* Assigned workers */
+
+#id_assigned_workers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding: 14px;
+    border: 1px solid #d8cec1;
+    border-radius: 8px;
+
+    background: #fffdf9;
+}
+
+#id_assigned_workers div {
+    display: flex;
+    align-items: center;
+}
+
+#id_assigned_workers label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 0;
+    color: #3b3027;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+#id_assigned_workers input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+
+    accent-color: #a65d45;
+    cursor: pointer;
+}
+    /* Placeholder */
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #a79d92;
+    }
+
+    /* Focus */
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #b08d57;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.12);
+    }
+
+    /* Textarea */
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    /* Select dropdown */
+    .form-group select {
+        cursor: pointer;
+        min-height: 46px;
+    }
+
+    /* Number/date inputs */
+    .form-group input[type="number"],
+    .form-group input[type="date"] {
+        min-height: 46px;
+    }
+
+    /* Two-column rows */
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+    /* Errors */
+    .form-error {
+        margin-top: 6px;
+        color: #a33f32;
+        font-size: 13px;
+    }
+
+    /* Buttons */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+
+        margin-top: 10px;
+        padding-top: 24px;
+
+        border-top: 1px solid #eee7df;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 11px 22px;
+
+        border-radius: 8px;
+        border: none;
+
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+
+        text-decoration: none;
+        cursor: pointer;
+
+        transition:
+            background 0.2s ease,
+            transform 0.15s ease;
+    }
+
+    .btn-primary {
+        background: #b08d57;
+        color: #ffffff;
+    }
+
+    .btn-primary:hover {
+        background: #967443;
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+    }
+
+    .btn-secondary {
+        background: #f3eee8;
+        color: #2b2118;
+    }
+
+    .btn-secondary:hover {
+        background: #e8dfd4;
+    }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+        .form-card {
+            padding: 22px;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<!-- <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script> -->
+
+<!-- <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const workerSelect = document.getElementById("id_assigned_workers");
+
+    if (workerSelect) {
+        new Choices(workerSelect, {
+            removeItemButton: true,
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: "",
+            placeholder: true,
+            placeholderValue: "Select workers..."
+        });
+    }
+});
+</script> -->
+
+{% endblock %}
+

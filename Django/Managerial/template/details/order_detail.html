@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Order {{ order.order_number }}</h1>
+        <p>View order details, assigned workers, and delivery history.</p>
+    </div>
+
+    <div class="page-header-actions">
+        <a href="{% url 'order-list' %}" class="btn btn-secondary">
+            Back to Orders
+        </a>
+    </div>
+</div>
+
+
+<div class="detail-grid">
+
+    <!-- Order Information -->
+    <div class="detail-card">
+        <div class="card-header">
+            <h2>Order Information</h2>
+        </div>
+
+        <div class="detail-list">
+
+            <div class="detail-item">
+                <span class="detail-label">Order Number</span>
+                <span class="detail-value">{{ order.order_number }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Customer</span>
+                <span class="detail-value">
+                    <a href="{% url 'customer-detail' order.customer.pk %}">
+                        {{ order.customer.name }}
+                    </a>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Description</span>
+                <span class="detail-value">{{ order.description }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Quantity</span>
+                <span class="detail-value">{{ order.quantity }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Price</span>
+                <span class="detail-value">{{ order.price }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Expected Completion</span>
+                <span class="detail-value">
+                    {{ order.expected_completion_date }}
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Status</span>
+                <span class="status-badge status-{{ order.status|lower }}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Created</span>
+                <span class="detail-value">
+                    {{ order.created_at|date:"M d, Y H:i" }}
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Assigned Workers -->
+    <div class="detail-card">
+        <div class="card-header">
+            <h2>Assigned Workers</h2>
+        </div>
+
+        {% if order.assigned_workers.all %}
+            <div class="worker-list">
+
+                {% for worker in order.assigned_workers.all %}
+                    <div class="worker-item">
+                        <div>
+                            <strong>{{ worker.name }}</strong>
+                            <span>{{ worker.role }}</span>
+                        </div>
+
+                        {% if worker.is_active %}
+                            <span class="worker-active">Active</span>
+                        {% else %}
+                            <span class="worker-inactive">Inactive</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <p class="empty-message">
+                No workers have been assigned to this order.
+            </p>
+        {% endif %}
+    </div>
+
+</div>
+
+
+<!-- Delivery History -->
+<div class="detail-card delivery-card">
+
+    <div class="card-header delivery-header">
+        <div>
+            <h2>Delivery History</h2>
+            <p>All deliveries recorded for this order.</p>
+        </div>
+
+    </div>
+
+
+    {% if order.deliveries.all %}
+
+        <div class="table-wrapper">
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Quantity</th>
+                        <th>Delivered By</th>
+                        <th>Recipient</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for delivery in order.deliveries.all %}
+                        <tr>
+
+                            <td>
+                                {% if delivery.delivery_date %}
+                                    {{ delivery.delivery_date|date:"M d, Y H:i" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <strong>{{ delivery.quantity_delivered }}</strong>
+                            </td>
+
+                            <td>
+                                {{ delivery.delivered_by|default:"—" }}
+                            </td>
+
+                            <td>
+                                {{ delivery.recipient|default:"—" }}
+                            </td>
+
+                            <td>
+                                {{ delivery.notes|default:"—" }}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <h3>No deliveries yet</h3>
+            <p>No delivery has been recorded for this order.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

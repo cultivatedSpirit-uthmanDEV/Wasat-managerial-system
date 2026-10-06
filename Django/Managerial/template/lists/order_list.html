@@ -1,0 +1,286 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Orders</h1>
+    <p>View and manage all customer orders.</p>
+  </div>
+
+  <a href="{% url 'create-order' %}" class="btn btn-primary"> Create Order </a>
+</div>
+
+<div class="table-card">
+  {% if orders %}
+
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Workers</th>
+          <th>Status</th>
+          <th>Expected Completion</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for order in orders %}
+
+        <tr>
+          <td>
+            <strong>{{ order.order_number }}</strong>
+          </td>
+
+          <td>
+            <a href="{% url 'customer-detail' order.customer.pk %}">
+              {{ order.customer.name }}
+            </a>
+          </td>
+
+          <td>{{ order.description|truncatechars:45 }}</td>
+
+          <td>{{ order.quantity }}</td>
+
+          <td>
+               {{ order.assigned_workers.name }}
+          </td>
+
+          <td>
+            <span class="status-badge status-{{ order.status|lower }}">
+              {{ order.get_status_display }}
+            </span>
+          </td>
+
+          <td>{{ order.expected_completion_date|date:"M d, Y" }}</td>
+
+          <td>{{ order.created_at|date:"M d, Y" }}</td>
+
+          <td>
+            <a href="{% url 'order-detail' order.pk %}" class="table-action">
+              View
+            </a>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+
+  <div class="empty-state">
+    <h3>No orders yet</h3>
+    <p>There are currently no orders in the system.</p>
+
+    <a href="{% url 'create-order' %}" class="btn btn-primary">
+      Create First Order
+    </a>
+  </div>
+
+  {% endif %}
+</div>
+
+<style>
+    
+    .table-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(43, 33, 24, 0.04);
+    margin-top: 7px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding: 8px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 900px;
+}
+
+/* Header */
+
+.data-table th {
+    padding: 17px 24px;
+    background: var(--cream-dark);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Table content */
+
+.data-table td {
+    padding: 19px 24px;
+    color: var(--text-dark);
+    font-size: 14px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Remove border from last row */
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Give rows breathing room */
+
+.data-table tbody tr {
+    background: var(--white);
+    transition: background 0.15s ease;
+}
+
+.data-table tbody tr:hover {
+    background: #fcfaf6;
+}
+
+/* Make the first column stand out */
+
+.data-table td:first-child {
+    min-width: 170px;
+}
+
+.data-table td:first-child strong {
+    font-size: 15px;
+}
+
+/* Keep phone numbers readable */
+
+.data-table td:nth-child(2),
+.data-table td:nth-child(3) {
+    min-width: 140px;
+}
+
+/* Orders column */
+
+.data-table td:nth-child(4) {
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Added date */
+
+.data-table td:nth-child(5) {
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+/* Action column */
+
+.data-table th:last-child,
+.data-table td:last-child {
+    width: 80px;
+    text-align: right;
+    padding-right: 28px;
+}
+
+.table-action {
+    display: inline-block;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--terracotta) !important;
+    background: var(--cream);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    white-space: nowrap;
+}
+
+.table-action:hover {
+    background: var(--cream-dark);
+}
+
+/* Empty state */
+
+.empty-state {
+    padding: 70px 30px;
+    text-align: center;
+}
+
+.empty-state h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.empty-state p {
+    margin: 0 0 24px;
+    color: var(--text-muted);
+}
+
+/* Mobile table responsiveness */
+
+@media (max-width: 700px) {
+
+    .table-card {
+        border-radius: 10px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 5px;
+    }
+
+    .data-table {
+        min-width: 760px;
+    }
+
+    .data-table th {
+        padding: 14px 18px;
+        font-size: 11px;
+    }
+
+    .data-table td {
+        padding: 17px 18px;
+        font-size: 13px;
+    }
+
+    .data-table td:first-child {
+        min-width: 150px;
+    }
+
+    .data-table td:nth-child(2),
+    .data-table td:nth-child(3) {
+        min-width: 130px;
+    }
+
+    .data-table td:nth-child(4) {
+        min-width: 70px;
+    }
+
+    .data-table td:nth-child(5) {
+        min-width: 120px;
+    }
+
+    .data-table th:last-child,
+    .data-table td:last-child {
+        padding-right: 20px;
+    }
+
+    .table-action {
+        padding: 7px 12px;
+    }
+}
+</style>
+
+{% endblock %}
+

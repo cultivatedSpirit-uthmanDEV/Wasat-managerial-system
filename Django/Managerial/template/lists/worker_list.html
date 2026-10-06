@@ -1,0 +1,424 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .workers-page {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Header */
+    .workers-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .workers-header h1 {
+        margin: 0 0 7px;
+        color: var(--text-dark);
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    .workers-header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    /* Main card */
+    .workers-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(43, 33, 24, 0.05);
+    }
+
+    .workers-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px 26px;
+        border-bottom: 1px solid var(--border);
+        background: var(--cream);
+    }
+
+    .workers-card-header h2 {
+        margin: 0 0 4px;
+        font-size: 17px;
+        color: var(--text-dark);
+    }
+
+    .workers-card-header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .worker-count {
+        padding: 7px 12px;
+        border-radius: 20px;
+        background: var(--cream-dark);
+        color: var(--terracotta);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* Table */
+    .workers-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .workers-table {
+        width: 100%;
+        min-width: 650px;
+        border-collapse: collapse;
+    }
+
+    .workers-table th {
+        padding: 15px 26px;
+        background: #faf7f2;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+    }
+
+    .workers-table td {
+        padding: 19px 26px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-dark);
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .workers-table tbody tr {
+        transition: background 0.15s ease;
+    }
+
+    .workers-table tbody tr:hover {
+        background: #fcfaf6;
+    }
+
+    .workers-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Worker name */
+    .worker-name {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .worker-avatar {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--cream-dark);
+        color: var(--terracotta);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .worker-name strong {
+        display: block;
+        font-size: 14px;
+        color: var(--text-dark);
+    }
+
+    .worker-role-mobile {
+        display: none;
+        margin-top: 3px;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    /* WhatsApp */
+    .worker-whatsapp {
+        color: var(--text-dark);
+    }
+
+    .worker-whatsapp.empty {
+        color: var(--text-muted);
+    }
+
+    /* Role */
+    .worker-role {
+        color: var(--text-muted);
+    }
+
+    /* Status */
+    .worker-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .worker-status::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .worker-status.active {
+        background: #edf5ed;
+        color: #4d7650;
+    }
+
+    .worker-status.inactive {
+        background: #f5eeee;
+        color: #8b5b55;
+    }
+
+    /* Empty state */
+    .workers-empty {
+        padding: 75px 30px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 54px;
+        height: 54px;
+        margin: 0 auto 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--cream-dark);
+        color: var(--terracotta);
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .workers-empty h3 {
+        margin: 0 0 8px;
+        color: var(--text-dark);
+        font-size: 19px;
+    }
+
+    .workers-empty p {
+        margin: 0 0 24px;
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+
+        .workers-header {
+            align-items: flex-start;
+            flex-direction: column;
+            margin-bottom: 22px;
+        }
+
+        .workers-header h1 {
+            font-size: 26px;
+        }
+
+        .workers-header .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        .workers-card {
+            border-radius: 12px;
+        }
+
+        .workers-card-header {
+            padding: 18px 20px;
+        }
+
+        .workers-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .workers-table {
+            min-width: 600px;
+        }
+
+        .workers-table th {
+            padding: 13px 18px;
+        }
+
+        .workers-table td {
+            padding: 16px 18px;
+        }
+
+        .worker-avatar {
+            width: 34px;
+            height: 34px;
+            font-size: 13px;
+        }
+    }
+</style>
+
+
+<div class="workers-page">
+
+    <div class="workers-header">
+        <div>
+            <h1>Workers</h1>
+            <p>View and manage the people working on customer orders.</p>
+        </div>
+
+        <a href="{% url 'create-worker' %}" class="btn btn-primary">
+            Add Worker
+        </a>
+    </div>
+
+
+    <div class="workers-card">
+
+        {% if workers %}
+
+            <div class="workers-card-header">
+                <div>
+                    <h2>Worker Directory</h2>
+                    <p>All workers currently registered in the system.</p>
+                </div>
+
+                <span class="worker-count">
+                    {{ workers|length }} worker{{ workers|length|pluralize }}
+                </span>
+            </div>
+
+
+            <div class="workers-table-wrapper">
+
+                <table class="workers-table">
+
+                    <thead>
+                        <tr>
+                            <th>Worker</th>
+                            <th>WhatsApp</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for worker in workers %}
+
+                            <tr>
+
+                                <td>
+                                    <div class="worker-name">
+
+                                        <div class="worker-avatar">
+                                            {{ worker.name|first|upper }}
+                                        </div>
+
+                                        <div>
+                                            <strong>{{ worker.name }}</strong>
+
+                                            <span class="worker-role-mobile">
+                                                {{ worker.role }}
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+
+                                <td>
+                                    {% if worker.whatsapp_num %}
+                                        <span class="worker-whatsapp">
+                                            {{ worker.whatsapp_num }}
+                                        </span>
+                                    {% else %}
+                                        <span class="worker-whatsapp empty">
+                                            —
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+
+                                <td>
+                                    <span class="worker-role">
+                                        {{ worker.role }}
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    {% if worker.is_active %}
+
+                                        <span class="worker-status active">
+                                            Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="worker-status inactive">
+                                            Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        {% else %}
+
+            <div class="workers-empty">
+
+                <div class="empty-icon">
+                    W
+                </div>
+
+                <h3>No workers yet</h3>
+
+                <p>
+                    There are currently no workers registered in the system.
+                </p>
+
+                <a href="{% url 'create-worker' %}" class="btn btn-primary">
+                    Add First Worker
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+

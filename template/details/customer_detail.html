@@ -1,0 +1,644 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+  .customer-page {
+    color: var(--text-dark, #392c28);
+    padding-bottom: 32px;
+  }
+
+  .customer-page * {
+    box-sizing: border-box;
+  }
+
+  .customer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .customer-heading {
+    min-width: 0;
+  }
+
+  .customer-eyebrow {
+    color: var(--terracotta, #b9674d);
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin: 0 0 8px;
+  }
+
+  .customer-heading h1 {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 750;
+    letter-spacing: -1px;
+    overflow-wrap: anywhere;
+  }
+
+  .customer-heading p {
+    margin: 8px 0 0;
+    color: var(--text-muted, #897b73);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .customer-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .customer-actions .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+
+  .customer-actions .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .customer-actions .btn-primary {
+    background: var(--terracotta, #b9674d);
+    color: #fff;
+    border: 1px solid var(--terracotta, #b9674d);
+  }
+
+  .customer-actions .btn-primary:hover {
+    background: #a4543d;
+  }
+
+  .customer-actions .btn-secondary {
+    background: var(--white, #fff);
+    color: var(--text-dark, #392c28);
+    border: 1px solid var(--border, #e9ded5);
+  }
+
+  .customer-actions .btn-secondary:hover {
+    background: var(--cream-dark, #f4e9df);
+  }
+
+  .customer-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.8fr);
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .customer-card {
+    background: var(--white, #fff);
+    border: 1px solid var(--border, #e9ded5);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(66, 43, 32, 0.035);
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .customer-card-header {
+    padding: 20px 22px;
+    border-bottom: 1px solid var(--border, #e9ded5);
+  }
+
+  .customer-card-header h2 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 750;
+  }
+
+  .customer-card-header p {
+    color: var(--text-muted, #897b73);
+    font-size: 12px;
+    margin: 6px 0 0;
+    line-height: 1.5;
+  }
+
+  .customer-info-body {
+    padding: 8px 22px 16px;
+  }
+
+  .customer-info-row {
+    display: grid;
+    grid-template-columns: minmax(110px, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid #f3ece6;
+  }
+
+  .customer-info-row:last-child {
+    border-bottom: none;
+  }
+
+  .customer-info-label {
+    color: var(--text-muted, #897b73);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .customer-info-value {
+    color: var(--text-dark, #392c28);
+    font-size: 13px;
+    font-weight: 650;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .customer-summary-body {
+    padding: 24px 22px;
+  }
+
+  .customer-avatar {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: #f6e6dc;
+    color: var(--terracotta, #b9674d);
+    font-size: 23px;
+    font-weight: 800;
+    margin-bottom: 22px;
+  }
+
+  .customer-summary-label {
+    color: var(--text-muted, #897b73);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+
+  .customer-summary-number {
+    font-size: 38px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--text-dark, #392c28);
+  }
+
+  .customer-summary-caption {
+    color: var(--text-muted, #897b73);
+    font-size: 12px;
+    margin-top: 9px;
+    line-height: 1.5;
+  }
+
+  .customer-summary-divider {
+    border: 0;
+    border-top: 1px solid var(--border, #e9ded5);
+    margin: 23px 0 17px;
+  }
+
+  .customer-summary-link {
+    color: var(--terracotta, #b9674d);
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .customer-summary-link:hover {
+    text-decoration: underline;
+  }
+
+  .order-history-card {
+    margin-top: 24px;
+  }
+
+  .order-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 21px 22px;
+    border-bottom: 1px solid var(--border, #e9ded5);
+  }
+
+  .order-history-header h2 {
+    font-size: 17px;
+    font-weight: 750;
+    margin: 0;
+  }
+
+  .order-history-header p {
+    color: var(--text-muted, #897b73);
+    font-size: 12px;
+    margin: 6px 0 0;
+  }
+
+  .order-count {
+    background: #f6e6dc;
+    color: #9b523b;
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .customer-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 760px;
+  }
+
+  .customer-table th {
+    background: #fcf8f4;
+    color: var(--text-muted, #897b73);
+    padding: 14px 18px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .customer-table td {
+    padding: 17px 18px;
+    border-bottom: 1px solid #f1e9e2;
+    color: var(--text-dark, #392c28);
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  .customer-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .customer-table tbody tr:hover {
+    background: #fdfaf7;
+  }
+
+  .order-number {
+    font-weight: 800;
+    color: var(--terracotta, #b9674d);
+    white-space: nowrap;
+  }
+
+  .order-description {
+    max-width: 220px;
+    line-height: 1.5;
+  }
+
+  .order-price {
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .order-date {
+    white-space: nowrap;
+    color: #6f625a;
+  }
+
+  .order-view-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: 1px solid #ead9cd;
+    border-radius: 7px;
+    color: var(--terracotta, #b9674d);
+    background: #fffaf6;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .order-view-link:hover {
+    background: #f6e6dc;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    line-height: 1.3;
+    font-weight: 800;
+    white-space: nowrap;
+    background: #f2ede8;
+    color: #68564b;
+  }
+
+  .status-pending {
+    background: #fff1d5;
+    color: #92600b;
+  }
+
+  .status-processing {
+    background: #e9e8ff;
+    color: #5149a0;
+  }
+
+  .status-ready {
+    background: #dff3e5;
+    color: #267343;
+  }
+
+  .status-out_for_delivery {
+    background: #e0efff;
+    color: #245b92;
+  }
+
+  .status-delivered {
+    background: #dff3e5;
+    color: #267343;
+  }
+
+  .status-partially_delivered {
+    background: #ffeadb;
+    color: #a05227;
+  }
+
+  .status-cancelled {
+    background: #fde5e3;
+    color: #a43d38;
+  }
+
+  .customer-empty-state {
+    text-align: center;
+    padding: 52px 24px;
+  }
+
+  .customer-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 17px;
+    border-radius: 18px;
+    background: #f7e9df;
+    color: var(--terracotta, #b9674d);
+    font-size: 25px;
+  }
+
+  .customer-empty-state h3 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    font-weight: 750;
+  }
+
+  .customer-empty-state p {
+    max-width: 350px;
+    margin: 0 auto 20px;
+    color: var(--text-muted, #897b73);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 760px) {
+    .customer-overview {
+      grid-template-columns: 1fr;
+    }
+
+    .customer-header {
+      align-items: flex-start;
+    }
+
+    .customer-actions {
+      width: 100%;
+    }
+
+    .customer-actions .btn {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .customer-info-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .customer-info-value {
+      text-align: left;
+    }
+
+    .customer-card-header,
+    .customer-info-body,
+    .customer-summary-body,
+    .order-history-header {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .customer-actions .btn {
+      padding: 10px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<div class="customer-page">
+  <!-- Page heading -->
+  <header class="customer-header">
+    <div class="customer-heading">
+      <p class="customer-eyebrow">Customer Management</p>
+      <h1>{{ customer.name }}</h1>
+      <p>View customer information and track their order history.</p>
+    </div>
+
+    <div class="customer-actions">
+      <a href="{% url 'customer-list' %}" class="btn btn-secondary">
+        ← Back to Customers
+      </a>
+
+      <a href="{% url 'create-order' %}" class="btn btn-primary">
+        + Create Order
+      </a>
+    </div>
+  </header>
+
+  <!-- Customer overview -->
+  <div class="customer-overview">
+    <!-- Customer information -->
+    <section class="customer-card">
+      <div class="customer-card-header">
+        <h2>Customer Information</h2>
+        <p>Contact details and account information.</p>
+      </div>
+
+      <div class="customer-info-body">
+        <div class="customer-info-row">
+          <span class="customer-info-label">Full name</span>
+          <span class="customer-info-value">{{ customer.name }}</span>
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">Phone number</span>
+          <span class="customer-info-value"
+            >{{ customer.phone|default:"—" }}</span
+          >
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">WhatsApp number</span>
+          <span class="customer-info-value"
+            >{{ customer.whatsapp_num|default:"—" }}</span
+          >
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">Customer since</span>
+          <span class="customer-info-value">
+            {{ customer.created_at|date:"M d, Y"|default:"—" }}
+          </span>
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">Last updated</span>
+          <span class="customer-info-value">
+            {{ customer.updated_at|date:"M d, Y · H:i"|default:"—" }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customer summary -->
+    <section class="customer-card">
+      <div class="customer-card-header">
+        <h2>Customer Summary</h2>
+        <p>A quick overview of this customer's activity.</p>
+      </div>
+
+      <div class="customer-summary-body">
+        <div class="customer-avatar" aria-hidden="true">
+          {{ customer.name|first|upper }}
+        </div>
+
+        <div class="customer-summary-label">Total orders placed</div>
+
+        <div class="customer-summary-number">{{ customer.orders.count }}</div>
+
+        <div class="customer-summary-caption">
+          Order{{ customer.orders.count|pluralize }} recorded for this customer.
+        </div>
+
+        <hr class="customer-summary-divider" />
+
+        <a href="{% url 'create-order' %}" class="customer-summary-link">
+          Create an order for this customer →
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Order history -->
+  <section class="customer-card order-history-card">
+    <div class="order-history-header">
+      <div>
+        <h2>Order History</h2>
+        <p>Review the orders associated with this customer.</p>
+      </div>
+
+      <span class="order-count">
+        {{ customer.orders.count }} order{{ customer.orders.count|pluralize }}
+      </span>
+    </div>
+
+    {% with orders=customer.orders.all %} {% if orders %}
+
+    <div class="customer-table-wrapper">
+      <table class="customer-table">
+        <thead>
+          <tr>
+            <th>Order Number</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Expected Completion</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>
+              <span class="order-number"> {{ order.order_number }} </span>
+            </td>
+
+            <td>
+              <div class="order-description">
+                {{ order.description|truncatechars:45 }}
+              </div>
+            </td>
+
+            <td>{{ order.quantity }}</td>
+
+            <td>
+              <span class="order-price"> {{ order.price }} </span>
+            </td>
+
+            <td>
+              <span class="status-badge status-{{ order.status|lower }}">
+                {{ order.get_status_display }}
+              </span>
+            </td>
+
+            <td>
+              <span class="order-date">
+                {{ order.expected_completion_date|date:"M d, Y"|default:"—" }}
+              </span>
+            </td>
+
+            <td>
+              <a
+                href="{% url 'order-detail' order.pk %}"
+                class="order-view-link"
+              >
+                View Order →
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <div class="customer-empty-state">
+      <div class="customer-empty-icon" aria-hidden="true">＋</div>
+
+      <h3>No orders yet</h3>
+
+      <p>
+        There are no orders for this customer yet. Create their first order to
+        start tracking production and delivery.
+      </p>
+
+      <a href="{% url 'create-order' %}" class="btn btn-primary">
+        Create First Order
+      </a>
+    </div>
+
+    {% endif %} {% endwith %}
+  </section>
+</div>
+
+{% endblock %} 

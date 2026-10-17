@@ -1,0 +1,654 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card-header delivery-header">
+    <div>
+        <h2>Delivery History</h2>
+        <p>All deliveries recorded for this order.</p>
+    </div>
+
+    {% if order.status != "DELIVERED" and order.status != "CANCELLED" %}
+        <a href="{% url 'create-delivery' order.pk %}" class="btn btn-primary">
+            Create Delivery
+        </a>
+    {% endif %}
+</div>
+
+
+<div class="detail-grid">
+
+    <!-- Order Information -->
+    <div class="detail-card">
+        <div class="card-header">
+            <h2>Order Information</h2>
+        </div>
+
+        <div class="detail-list">
+
+            <div class="detail-item">
+                <span class="detail-label">Order Number</span>
+                <span class="detail-value">{{ order.order_number }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Customer</span>
+                <span class="detail-value">
+                    <a href="{% url 'customer-detail' order.customer.pk %}">
+                        {{ order.customer.name }}
+                    </a>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Description</span>
+                <span class="detail-value">{{ order.description }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Quantity</span>
+                <span class="detail-value">{{ order.quantity }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Price</span>
+                <span class="detail-value">{{ order.price }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Expected Completion: </span>
+                <span class="detail-value">
+                    {{ order.expected_completion_date }}
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Status: </span>
+                <span class="status-badge status-{{ order.status|lower }}">
+                    {{ order.status }}
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Created</span>
+                <span class="detail-value">
+                    {{ order.created_at|date:"M d, Y H:i" }}
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Assigned Workers -->
+    <div class="detail-card">
+        <div class="card-header">
+            <h2>Assigned Workers</h2>
+        </div>
+
+        {% if order.assigned_workers.all %}
+            <div class="worker-list">
+
+                {% for worker in order.assigned_workers.all %}
+                    <div class="worker-item">
+                        <div>
+                            <strong>{{ worker.name }}</strong>
+                            <span>{{ worker.role }}</span>
+                        </div>
+
+                        {% if worker.is_active %}
+                            <span class="worker-active">Active</span>
+                        {% else %}
+                            <span class="worker-inactive">Inactive</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <p class="empty-message">
+                No workers have been assigned to this order.
+            </p>
+        {% endif %}
+    </div>
+
+</div>
+
+
+<!-- Delivery History -->
+<div class="detail-card delivery-card">
+
+    <div class="card-header delivery-header">
+        <div>
+            <h2>Delivery History</h2>
+            <p>All deliveries recorded for this order.</p>
+        </div>
+
+    </div>
+
+
+    {% if order.deliveries.all %}
+
+        <div class="table-wrapper">
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Quantity</th>
+                        <th>Delivered By</th>
+                        <th>Recipient</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for delivery in order.deliveries.all %}
+                        <tr>
+
+                            <td>
+                                {% if delivery.delivery_date %}
+                                    {{ delivery.delivery_date|date:"M d, Y H:i" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <strong>{{ delivery.quantity_delivered }}</strong>
+                            </td>
+
+                            <td>
+                                {{ delivery.delivered_by|default:"—" }}
+                            </td>
+
+                            <td>
+                                {{ delivery.recipient|default:"—" }}
+                            </td>
+
+                            <td>
+                                {{ delivery.notes|default:"—" }}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <h3>No deliveries yet</h3>
+            <p>No delivery has been recorded for this order.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+<style>
+    
+/* Delivery history card */
+
+
+.delivery-card {
+    margin-top: 24px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+/* Card heading */
+.delivery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.delivery-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.delivery-header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* Responsive table container */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+    color: #374151;
+}
+
+/* Table headings */
+.data-table thead {
+    background: #f8fafc;
+}
+
+.data-table th {
+    padding: 14px 20px;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Table cells */
+.data-table td {
+    padding: 17px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+/* Alternating rows */
+.data-table tbody tr:nth-child(even) {
+    background: #fcfcfd;
+}
+
+/* Hover effect */
+.data-table tbody tr {
+    transition: background-color 0.18s ease;
+}
+
+.data-table tbody tr:hover {
+    background: #f1f5f9;
+}
+
+/* Remove bottom border from last row */
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Emphasize quantity */
+.data-table td strong {
+    display: inline-block;
+    min-width: 28px;
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Notes column */
+.data-table td:last-child {
+    min-width: 160px;
+    max-width: 280px;
+    overflow-wrap: anywhere;
+}
+
+/* Empty state */
+.delivery-card .empty-state {
+    padding: 42px 24px;
+    text-align: center;
+}
+
+.delivery-card .empty-state h3 {
+    margin: 0 0 8px;
+    color: #1f2937;
+    font-size: 17px;
+}
+
+.delivery-card .empty-state p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Smaller screens */
+@media (max-width: 640px) {
+    .delivery-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .delivery-header .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 13px 15px;
+    }
+
+    .data-table {
+        font-size: 13px;
+    }
+}
+
+
+/* Order information and assigned workers */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin: 24px 0;
+    align-items: stretch;
+}
+
+.detail-card {
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #eadfdc;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(75, 45, 35, 0.04);
+}
+
+.detail-card > .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #f0e7e3;
+    background: #fffaf8;
+}
+
+.detail-card .card-header h2 {
+    margin: 0;
+    color: #492f2a;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.section-subtitle {
+    margin: 6px 0 0;
+    color: #8a7771;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.order-reference,
+.worker-count {
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: #f7e8e1;
+    color: #854b3b;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Order detail rows */
+
+.detail-list {
+    padding: 8px 24px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f3eeeb;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #8a7771;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.detail-value {
+    color: #493630;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.detail-value a {
+    color: #a45d48;
+    text-decoration: none;
+}
+
+.detail-value a:hover {
+    text-decoration: underline;
+}
+
+.price-value {
+    color: #79513e;
+}
+
+/* Order status badges */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: normal;
+}
+
+.status-pending {
+    color: #946200;
+    background: #fff3cd;
+}
+
+.status-processing {
+    color: #8a4b12;
+    background: #ffedd5;
+}
+
+.status-ready {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-out_for_delivery {
+    color: #1d4ed8;
+    background: #dbeafe;
+}
+
+.status-partially_delivered {
+    color: #854d0e;
+    background: #fef3c7;
+}
+
+.status-delivered {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-cancelled {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+/* Assigned worker rows */
+
+.worker-list {
+    padding: 8px 20px;
+}
+
+.worker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 4px;
+    border-bottom: 1px solid #f3eeeb;
+}
+
+.worker-item:last-child {
+    border-bottom: none;
+}
+
+.worker-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #f5e4dc;
+    color: #854b3b;
+    font-size: 17px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.worker-details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.worker-details strong {
+    color: #493630;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.worker-details > span {
+    color: #8a7771;
+    font-size: 12px;
+}
+
+.worker-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.worker-active {
+    color: #28734a;
+}
+
+.worker-active .status-dot {
+    background: #35a66b;
+}
+
+.worker-inactive {
+    color: #9b4646;
+}
+
+.worker-inactive .status-dot {
+    background: #d45d5d;
+}
+
+/* No assigned workers */
+
+.workers-empty {
+    padding: 38px 24px;
+    text-align: center;
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 14px;
+    border-radius: 14px;
+    background: #f8eee9;
+    color: #a45d48;
+    font-size: 25px;
+}
+
+.workers-empty h3 {
+    margin: 0 0 8px;
+    color: #493630;
+    font-size: 15px;
+}
+
+.workers-empty p {
+    max-width: 280px;
+    margin: 0 auto;
+    color: #8a7771;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* Responsive layout */
+
+@media (max-width: 850px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .detail-card > .card-header {
+        padding: 18px;
+    }
+
+    .detail-list {
+        padding: 8px 18px;
+    }
+
+    .detail-item {
+        gap: 12px;
+    }
+
+    .detail-label,
+    .detail-value {
+        font-size: 12px;
+    }
+
+    .worker-list {
+        padding: 8px 14px;
+    }
+
+    .worker-item {
+        gap: 9px;
+    }
+
+    .worker-avatar {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+
+</style>
+
+
+{% endblock %}

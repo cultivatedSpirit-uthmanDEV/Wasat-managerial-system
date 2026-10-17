@@ -1,0 +1,577 @@
+ {% extends "base.html" %} {% block title %}Customers | Wasat
+Managerial{% endblock %} {% block content %}
+
+<div class="customers-page">
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="header-content">
+      <span class="eyebrow">CUSTOMER MANAGEMENT</span>
+      <h1>Customers</h1>
+      <p>Manage customer records and keep track of their orders.</p>
+    </div>
+
+    <a href="{% url 'create-customer' %}" class="btn btn-primary">
+      <span class="add-icon">+</span>
+      Add Customer
+    </a>
+  </div>
+
+  <!-- Customer summary -->
+  <div class="customer-summary">
+    <div class="summary-icon">♙</div>
+    <div>
+      <span class="summary-label">Customer Directory</span>
+      <strong>
+        {% if customers %} {{ customers|length }} {% else %} 0 {% endif %}
+        <span class="summary-suffix"
+          >customer{{ customers|length|pluralize }}</span
+        >
+      </strong>
+    </div>
+  </div>
+   <form
+    style="display: flex; margin-bottom: 6px"
+    method="GET"
+    action="{% url 'order-search' %}"
+  >
+    <input
+      style="width: 100%; height: 35px; border: none; border-radius: 2px; border : none"
+      type="search"
+      name="q"
+      value="{{ query }}"
+      placeholder="Search customers..."
+    />
+    <button
+      class="search-btn"
+      style="
+        width: 15%;
+        border: none;
+        background-color: #f0e7e3;
+        border: none;
+        border-radius: 3px;
+        margin-left: 2px;
+      "
+      type="submit"
+    >
+      Search
+    </button>
+  </form>
+  <!-- Customer table -->
+  <div class="table-card">
+    <div class="table-card-header">
+      <div>
+        <h2>All Customers</h2>
+        <p>Customer contact information and order history.</p>
+      </div>
+    </div>
+
+    {% if customers %}
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>WhatsApp</th>
+            <th class="center-column">Orders</th>
+            <th>Date Added</th>
+            <th class="action-column">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for customer in customers %}
+          <tr>
+            <td>
+              <div class="customer-identity">
+                <div class="customer-avatar">
+                  {{ customer.name|first|upper }}
+                </div>
+
+                <div class="customer-name">
+                  <strong>{{ customer.name }}</strong>
+                  <span>Customer</span>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              {% if customer.phone %}
+              <span class="contact-value"> {{ customer.phone }} </span>
+              {% else %}
+              <span class="muted-value">Not provided</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if customer.whatsapp_num %}
+              <span class="contact-value"> {{ customer.whatsapp_num }} </span>
+              {% else %}
+              <span class="muted-value">—</span>
+              {% endif %}
+            </td>
+
+            <td class="center-column">
+              <span class="order-count"> {{ customer.orders.count }} </span>
+            </td>
+
+            <td>
+              <span class="date-value">
+                {{ customer.created_at|date:"M d, Y" }}
+              </span>
+            </td>
+
+            <td class="action-column">
+              <a
+                href="{% url 'customer-detail' customer.pk %}"
+                class="table-action"
+              >
+                View Details
+                <span aria-hidden="true">→</span>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+      <div class="empty-icon">♙</div>
+      <h3>No customers yet</h3>
+      <p>
+        Your customer directory is empty. Add your first customer to start
+        recording orders and contact details.
+      </p>
+
+      <a href="{% url 'create-customer' %}" class="btn btn-primary">
+        + Add First Customer
+      </a>
+    </div>
+
+    {% endif %}
+  </div>
+
+  <div class="page-footer-note">
+    Wasat Managerial <span>·</span> Customer Directory
+  </div>
+</div>
+
+<style>
+  .customers-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+
+    --customer-espresso: #2b2118;
+    --customer-terracotta: #a65d45;
+    --customer-cream: #f8f4ed;
+    --customer-cream-dark: #efe8dc;
+    --customer-border: #e4dbcf;
+    --customer-muted: #766e65;
+  }
+
+  /* Header */
+  .customers-page .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+  }
+
+  .customers-page .eyebrow {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--customer-terracotta);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+  }
+
+  .customers-page .page-header h1 {
+    margin: 0 0 7px;
+    color: var(--customer-espresso);
+    font-size: clamp(25px, 3vw, 31px);
+    line-height: 1.2;
+  }
+
+  .customers-page .page-header p {
+    margin: 0;
+    color: var(--customer-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Primary button */
+  .customers-page .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+
+    min-height: 43px;
+    padding: 11px 17px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.15s ease;
+  }
+
+  .customers-page .btn-primary {
+    background: var(--customer-terracotta);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(166, 93, 69, 0.12);
+  }
+
+  .customers-page .btn-primary:hover {
+    background: #914d38;
+  }
+
+  .customers-page .btn-primary:active {
+    transform: translateY(1px);
+  }
+
+  .add-icon {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* Summary */
+  .customer-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    width: fit-content;
+    min-width: 235px;
+    margin-bottom: 22px;
+    padding: 16px 20px;
+
+    background: #fff;
+    border: 1px solid var(--customer-border);
+    border-radius: 12px;
+  }
+
+  .summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+
+    background: #f4e7dc;
+    color: var(--customer-terracotta);
+    border-radius: 10px;
+    font-size: 23px;
+  }
+
+  .summary-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--customer-muted);
+    font-size: 11px;
+  }
+
+  .customer-summary strong {
+    color: var(--customer-espresso);
+    font-size: 23px;
+    line-height: 1.2;
+  }
+
+  .summary-suffix {
+    color: var(--customer-muted);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  /* Table card */
+  .customers-page .table-card {
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--customer-border);
+    border-radius: 13px;
+    box-shadow: 0 3px 12px rgba(43, 33, 24, 0.035);
+  }
+
+  .table-card-header {
+    padding: 22px 24px;
+    border-bottom: 1px solid #eee6dc;
+    background: #fcfaf7;
+  }
+
+  .table-card-header h2 {
+    margin: 0 0 6px;
+    color: var(--customer-espresso);
+    font-size: 17px;
+  }
+
+  .table-card-header p {
+    margin: 0;
+    color: var(--customer-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .customers-page .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .customers-page .data-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+  }
+
+  .customers-page .data-table th {
+    padding: 15px 20px;
+    background: #f8f4ed;
+    color: #766e65;
+    font-size: 10px;
+    font-weight: 800;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--customer-border);
+  }
+
+  .customers-page .data-table td {
+    padding: 17px 20px;
+    color: #392f26;
+    font-size: 13px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0e9e1;
+  }
+
+  .customers-page .data-table tbody tr {
+    background: #fff;
+    transition: background 0.15s ease;
+  }
+
+  .customers-page .data-table tbody tr:hover {
+    background: #fdfaf6;
+  }
+
+  .customers-page .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Customer identity */
+  .customer-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 180px;
+  }
+
+  .customer-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 39px;
+    height: 39px;
+
+    border: 1px solid #e7d3c4;
+    border-radius: 11px;
+    background: #f4e7dc;
+    color: var(--customer-terracotta);
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .customer-name strong {
+    display: block;
+    color: var(--customer-espresso);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .customer-name span {
+    display: block;
+    margin-top: 4px;
+    color: #96897c;
+    font-size: 10px;
+  }
+
+  .contact-value {
+    white-space: nowrap;
+    color: #493b30;
+  }
+
+  .muted-value {
+    color: #a59a8f;
+  }
+
+  /* Order count */
+  .center-column {
+    text-align: center !important;
+  }
+
+  .order-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 32px;
+    height: 29px;
+    padding: 0 9px;
+
+    border: 1px solid #ead9cb;
+    border-radius: 8px;
+    background: #fbf2e9;
+    color: #92533d;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .date-value {
+    color: #75695e;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  /* View action */
+  .action-column {
+    text-align: right !important;
+    white-space: nowrap;
+  }
+
+  .table-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 8px 11px;
+    border: 1px solid #e8dbcf;
+    border-radius: 7px;
+
+    background: #fffaf5;
+    color: var(--customer-terracotta) !important;
+
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none !important;
+
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .table-action:hover {
+    background: #f4e7dc;
+    border-color: #d9bca8;
+  }
+
+  /* Empty state */
+  .customers-page .empty-state {
+    padding: 65px 25px;
+    text-align: center;
+  }
+
+  .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 66px;
+    height: 66px;
+    margin: 0 auto 18px;
+
+    border-radius: 18px;
+    background: #f4e7dc;
+    color: var(--customer-terracotta);
+    font-size: 30px;
+  }
+
+  .customers-page .empty-state h3 {
+    margin: 0 0 10px;
+    color: var(--customer-espresso);
+    font-size: 20px;
+  }
+
+  .customers-page .empty-state p {
+    max-width: 400px;
+    margin: 0 auto 24px;
+    color: var(--customer-muted);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .page-footer-note {
+    margin-top: 20px;
+    text-align: center;
+    color: #9a8e82;
+    font-size: 11px;
+  }
+
+  .page-footer-note span {
+    margin: 0 5px;
+    color: var(--customer-terracotta);
+  }
+
+  /* Responsive layout */
+  @media (max-width: 700px) {
+    .customers-page .page-header {
+      align-items: flex-start;
+    }
+
+    .customers-page .page-header > .btn {
+      width: 100%;
+    }
+
+    .customer-summary {
+      width: 100%;
+    }
+
+    .table-card-header {
+      padding: 19px 17px;
+    }
+
+    .customers-page .data-table {
+      min-width: 820px;
+    }
+
+    .customers-page .data-table th {
+      padding: 14px 16px;
+    }
+
+    .customers-page .data-table td {
+      padding: 15px 16px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .customers-page .page-header p {
+      font-size: 13px;
+    }
+
+    .customer-summary {
+      padding: 14px;
+    }
+  }
+</style>
+
+{% endblock %}

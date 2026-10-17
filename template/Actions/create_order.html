@@ -1,0 +1,777 @@
+{% extends "base.html" %}
+
+{% block title %}Create Order | Wasat Managerial{% endblock %}
+
+{% block content %}
+
+<div class="order-page">
+
+    <!-- Page heading -->
+    <div class="page-header">
+        <div class="page-heading-icon">✂</div>
+
+        <div class="page-heading-text">
+            <span class="eyebrow">ORDER MANAGEMENT</span>
+            <h1>Create New Order</h1>
+            <p>Record a customer's order and organize production.</p>
+        </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div>
+                <h2>Order Information</h2>
+                <p>Complete the details below to create an order.</p>
+            </div>
+
+            <span class="required-note">
+                * Required fields
+            </span>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-alert">
+                    <strong>Please review the form.</strong>
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Customer and description -->
+            <div class="form-section">
+                <div class="section-heading">
+                    <span class="section-number">01</span>
+                    <div>
+                        <h3>Customer & Order Details</h3>
+                        <p>Who is the order for, and what do they need?</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.customer.id_for_label }}">
+                        Customer <span class="required">*</span>
+                    </label>
+
+                    {{ form.customer }}
+
+                    {% if form.customer.errors %}
+                        <div class="form-error">
+                            {{ form.customer.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">
+                        Order Description <span class="required">*</span>
+                    </label>
+
+                    {{ form.description }}
+
+                    <small class="field-help">
+                        Describe the garment, style, fabric, measurements, or special instructions.
+                    </small>
+
+                    {% if form.description.errors %}
+                        <div class="form-error">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Quantity and price -->
+            <div class="form-section">
+                <div class="section-heading">
+                    <span class="section-number">02</span>
+                    <div>
+                        <h3>Order Specifications</h3>
+                        <p>Set the quantity and price for this order.</p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="{{ form.quantity.id_for_label }}">
+                            Quantity <span class="required">*</span>
+                        </label>
+
+                        {{ form.quantity }}
+
+                        <small class="field-help">
+                            Number of items ordered.
+                        </small>
+
+                        {% if form.quantity.errors %}
+                            <div class="form-error">
+                                {{ form.quantity.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.price.id_for_label }}">
+                            Total Order Price <span class="required">*</span>
+                        </label>
+
+                        <div class="price-input-wrap">
+                            <span class="price-prefix">₦</span>
+                            {{ form.price }}
+                        </div>
+
+                        <small class="field-help">
+                            Enter the total price for the order.
+                        </small>
+
+                        {% if form.price.errors %}
+                            <div class="form-error">
+                                {{ form.price.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="{{ form.expected_completion_date.id_for_label }}">
+                            Expected Completion Date
+                        </label>
+
+                        {{ form.expected_completion_date }}
+
+                        <small class="field-help">
+                            When production should be completed.
+                        </small>
+
+                        {% if form.expected_completion_date.errors %}
+                            <div class="form-error">
+                                {{ form.expected_completion_date.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Worker assignment -->
+            <div class="form-section">
+                <div class="section-heading">
+                    <span class="section-number">03</span>
+                    <div>
+                        <h3>Production Assignment</h3>
+                        <p>Choose the workers responsible for this order.</p>
+                    </div>
+                </div>
+
+                <div class="form-group worker-group">
+                    <label for="{{ form.assigned_workers.id_for_label }}">
+                        Assigned Workers
+                    </label>
+
+                    {{ form.assigned_workers }}
+
+                    <small class="field-help">
+                        You can assign more than one worker to an order.
+                    </small>
+
+                    {% if form.assigned_workers.errors %}
+                        <div class="form-error">
+                            {{ form.assigned_workers.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Form actions -->
+            <div class="form-actions">
+                <a href="{% url 'order-list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    <span>Create Order</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <p class="form-footer-note">
+        Wasat Managerial <span>·</span> Order Management
+    </p>
+
+</div>
+
+<style>
+    .order-page {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-bottom: 30px;
+
+        --order-espresso: #2b2118;
+        --order-terracotta: #a65d45;
+        --order-gold: #b08d57;
+        --order-cream: #f8f4ed;
+        --order-border: #e4dbcf;
+        --order-muted: #766e65;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        margin-bottom: 26px;
+    }
+
+    .page-heading-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        width: 58px;
+        height: 58px;
+
+        border-radius: 15px;
+        background: #efe1d5;
+        color: var(--order-terracotta);
+        font-size: 27px;
+    }
+
+    .page-heading-text {
+        min-width: 0;
+    }
+
+    .eyebrow {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--order-terracotta);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.6px;
+    }
+
+    .page-heading-text h1 {
+        margin: 0 0 7px;
+        color: var(--order-espresso);
+        font-size: clamp(24px, 3vw, 31px);
+        line-height: 1.2;
+        font-weight: 750;
+    }
+
+    .page-heading-text p {
+        margin: 0;
+        color: var(--order-muted);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .form-card {
+        overflow: visible;
+        background: #fff;
+        border: 1px solid var(--order-border);
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(43, 33, 24, 0.045);
+    }
+
+    .form-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+
+        padding: 25px 30px;
+        background: #fcfaf7;
+        border-bottom: 1px solid #eee6dc;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .form-card-header h2 {
+        margin: 0 0 6px;
+        color: var(--order-espresso);
+        font-size: 19px;
+    }
+
+    .form-card-header p {
+        margin: 0;
+        color: var(--order-muted);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .required-note {
+        color: var(--order-muted);
+        font-size: 12px;
+    }
+
+    .required {
+        color: var(--order-terracotta);
+    }
+
+    .form-card form {
+        padding: 30px;
+    }
+
+    .form-section {
+        min-width: 0;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: flex-start;
+        gap: 13px;
+        margin-bottom: 25px;
+    }
+
+    .section-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        width: 35px;
+        height: 35px;
+
+        background: #f4e7dc;
+        color: var(--order-terracotta);
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .section-heading h3 {
+        margin: 1px 0 6px;
+        color: var(--order-espresso);
+        font-size: 16px;
+    }
+
+    .section-heading p {
+        margin: 0;
+        color: var(--order-muted);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .section-divider {
+        height: 1px;
+        margin: 30px 0;
+        background: #eee7df;
+    }
+
+    .form-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 22px;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 0;
+        margin-bottom: 23px;
+    }
+
+    .form-group:last-child {
+        margin-bottom: 23px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 9px;
+        color: #392d23;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* Consistent Django input styling */
+    .form-group input:not([type="checkbox"]):not([type="radio"]),
+    .form-group select,
+    .form-group textarea {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-height: 47px;
+
+        padding: 12px 14px;
+        border: 1px solid #ded3c6;
+        border-radius: 9px;
+
+        background-color: #fffdfb;
+        color: var(--order-espresso);
+
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            background-color .2s ease;
+    }
+
+    .form-group input:hover,
+    .form-group select:hover,
+    .form-group textarea:hover {
+        border-color: #c9ad98;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--order-terracotta);
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(166, 93, 69, .12);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #aa9e92;
+    }
+
+    .form-group textarea {
+        min-height: 125px;
+        resize: vertical;
+    }
+
+    .form-group input[type="date"] {
+        cursor: pointer;
+    }
+
+    .field-help {
+        display: block;
+        margin-top: 8px;
+        color: #887c70;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .price-input-wrap {
+        position: relative;
+    }
+
+    .price-prefix {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        z-index: 1;
+        transform: translateY(-50%);
+
+        color: var(--order-terracotta);
+        font-size: 14px;
+        font-weight: 700;
+        pointer-events: none;
+    }
+
+    .price-input-wrap input {
+        padding-left: 34px !important;
+    }
+
+    /* Worker selection: supports checkbox groups */
+    #id_assigned_workers {
+        accent-color: var(--order-terracotta);
+    }
+
+    .worker-group ul,
+    .worker-group #id_assigned_workers:not(select) {
+        margin: 0;
+        padding: 15px;
+        list-style: none;
+
+        border: 1px solid #e5d9cc;
+        border-radius: 10px;
+        background: #fcfaf7;
+    }
+
+    .worker-group ul li {
+        margin: 0;
+        padding: 8px 0;
+    }
+
+    .worker-group ul li + li {
+        border-top: 1px solid #eee6dc;
+    }
+
+    .worker-group ul label,
+    .worker-group #id_assigned_workers label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+
+        color: #49392d;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .worker-group input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        margin: 0;
+        accent-color: var(--order-terracotta);
+        cursor: pointer;
+    }
+
+    /* Multiple-select fallback */
+    .worker-group select[multiple] {
+        min-height: 135px;
+        padding: 10px;
+    }
+
+    .worker-group select[multiple] option {
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    /* Choices.js styling if assigned_workers is a select */
+    .worker-group .choices {
+        margin-bottom: 0;
+    }
+
+    .worker-group .choices__inner {
+        min-height: 47px;
+        padding: 6px 10px;
+        border: 1px solid #ded3c6;
+        border-radius: 9px;
+        background: #fffdfb;
+        font-size: 13px;
+    }
+
+    .worker-group .choices.is-focused .choices__inner,
+    .worker-group .choices.is-open .choices__inner {
+        border-color: var(--order-terracotta);
+        box-shadow: 0 0 0 3px rgba(166, 93, 69, .12);
+    }
+
+    .worker-group .choices__list--multiple .choices__item {
+        border: 1px solid #a65d45;
+        border-radius: 6px;
+        background: #a65d45;
+        font-size: 12px;
+    }
+
+    .worker-group .choices__list--dropdown,
+    .worker-group .choices__list[aria-expanded] {
+        border-color: #ded3c6;
+        border-radius: 9px;
+        z-index: 20;
+    }
+
+    .worker-group .choices__list--dropdown .choices__item--selectable.is-highlighted {
+        background: #f4e7dc;
+        color: var(--order-espresso);
+    }
+
+    /* Validation errors */
+    .form-error {
+        margin-top: 8px;
+        color: #a33f32;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .form-error ul,
+    .form-alert ul {
+        margin: 5px 0 0;
+        padding-left: 20px;
+    }
+
+    .form-group:has(.form-error) input,
+    .form-group:has(.form-error) select,
+    .form-group:has(.form-error) textarea {
+        border-color: #c95e50;
+    }
+
+    .form-alert {
+        margin-bottom: 25px;
+        padding: 14px 16px;
+        border: 1px solid #edc5bf;
+        border-radius: 9px;
+        background: #fff2ef;
+        color: #913d32;
+        font-size: 13px;
+    }
+
+    /* Actions */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        margin-top: 10px;
+        padding-top: 25px;
+        border-top: 1px solid #eee7df;
+    }
+
+    .form-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+
+        min-height: 45px;
+        padding: 12px 20px;
+
+        border: 1px solid transparent;
+        border-radius: 9px;
+
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            transform .15s ease;
+    }
+
+    .form-actions .btn:active {
+        transform: translateY(1px);
+    }
+
+    .form-actions .btn-primary {
+        background: var(--order-terracotta);
+        color: #fff;
+    }
+
+    .form-actions .btn-primary:hover {
+        background: #914d38;
+    }
+
+    .form-actions .btn-secondary {
+        border-color: #e2d8cc;
+        background: #fff;
+        color: #49392d;
+    }
+
+    .form-actions .btn-secondary:hover {
+        background: #f7f1e9;
+        border-color: #d0bba7;
+    }
+
+    .form-footer-note {
+        margin: 18px 0 0;
+        text-align: center;
+        color: #978a7d;
+        font-size: 11px;
+    }
+
+    .form-footer-note span {
+        margin: 0 5px;
+        color: var(--order-terracotta);
+    }
+
+    @media (max-width: 700px) {
+        .page-header {
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .page-heading-icon {
+            width: 47px;
+            height: 47px;
+            border-radius: 12px;
+            font-size: 23px;
+        }
+
+        .form-card-header {
+            align-items: flex-start;
+            padding: 21px;
+        }
+
+        .form-card form {
+            padding: 22px 20px;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .form-group {
+            width: 100%;
+        }
+
+        .section-divider {
+            margin: 12px 0 25px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .form-card form {
+            padding: 19px 15px;
+        }
+
+        .form-card-header {
+            padding: 19px 15px;
+        }
+
+        .section-heading {
+            gap: 10px;
+        }
+
+        .section-heading h3 {
+            font-size: 15px;
+        }
+    }
+</style>
+
+<!-- Choices.js is initialized only for a multiple-select worker field. -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const workerSelect = document.getElementById("id_assigned_workers");
+
+    if (
+        workerSelect &&
+        workerSelect.tagName === "SELECT" &&
+        workerSelect.multiple &&
+        typeof Choices !== "undefined"
+    ) {
+        new Choices(workerSelect, {
+            removeItemButton: true,
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: "",
+            placeholder: true,
+            placeholderValue: "Search and select workers...",
+            searchPlaceholderValue: "Type a worker's name..."
+        });
+    }
+});
+</script>
+
+{% endblock %}

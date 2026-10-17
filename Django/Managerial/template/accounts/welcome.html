@@ -1,0 +1,317 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Welcome | Wasat Managerial</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f9fc;
+        color: #3e2e02;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 7%;
+        background: #ffffff;
+        border-bottom: 1px solid #e8ebf0;
+      }
+
+      .brand {
+        font-size: 22px;
+        font-weight: 700;
+        color: #172033;
+      }
+
+      .brand span {
+        color: #b08d57;
+      }
+
+      .nav-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 11px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.2s ease;
+      }
+
+      .btn-login {
+        color: #172033;
+        border: 1px solid #d8dde6;
+        background: #ffffff;
+      }
+
+      .btn-login:hover {
+        background: #f1f4f8;
+      }
+
+      .btn-primary {
+        color: rgb(69, 43, 3);
+        background: #b08d57;
+        border: 1px solid #b08d57;
+      }
+
+      .btn-primary:hover {
+        background: #a56813;
+        opacity: 90%;
+      }
+
+      .hero {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 100px 30px 80px;
+        text-align: center;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        padding: 7px 13px;
+        margin-bottom: 20px;
+        border-radius: 20px;
+        background: #eaf2ff;
+        color: #b08d57;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        max-width: 800px;
+        margin: 0 auto 20px;
+        font-size: 48px;
+        line-height: 1.15;
+        letter-spacing: -1px;
+      }
+
+      .hero h1 span {
+        color: #b08d57;
+      }
+
+      .hero p {
+        max-width: 650px;
+        margin: 0 auto 32px;
+        color: #667085;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+      }
+
+      .hero-actions .btn {
+        padding: 13px 24px;
+      }
+
+      .features {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 30px 80px;
+    flex: 1;
+}
+
+      .features-header {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      .features-header h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .features-header p {
+        color: #b08d57;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .feature-card {
+        background: #ffffff;
+        border: 1px solid #e6e9ef;
+        border-radius: 12px;
+        padding: 28px;
+      }
+
+      .feature-icon {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+        border-radius: 10px;
+        background: #f6f3ee;
+        color: #b08d57;
+        font-size: 20px;
+      }
+
+      .feature-card h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .feature-card p {
+        color: #b08d57;
+        line-height: 1.6;
+        font-size: 14px;
+      }
+
+      footer {
+        padding: 25px;
+        text-align: center;
+        border-top: 1px solid #e8ebf0;
+        color: #b08d57;
+        font-size: 13px;
+        background: #ffffff;
+      }
+      h3 {
+        color:#39270b ;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 0 20px;
+        }
+
+        .hero {
+          padding: 70px 20px 60px;
+        }
+
+        .hero h1 {
+          font-size: 36px;
+        }
+
+        .hero p {
+          font-size: 16px;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-actions .btn-login {
+          display: none;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          max-width: 250px;
+          margin: 0 auto;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="brand">Wasat <span>Managerial</span></div>
+
+      <div class="nav-actions">
+        <a href="{% url 'login' %}" class="btn btn-login"> Sign In </a>
+
+        <a href="{% url 'register' %}" class="btn btn-primary"> Get Started </a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">Operations Management System</div>
+
+      <h1>
+        Manage your operations
+        <span>with clarity.</span>
+      </h1>
+
+      <p>
+        Wasat Managerial helps you manage customers, orders, workers,
+        processing, and deliveries from one central system.
+      </p>
+
+      <div class="hero-actions">
+        <a href="{% url 'register' %}" class="btn btn-primary"> Get Started </a>
+
+        <a href="{% url 'login' %}" class="btn btn-login"> Sign In </a>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="features-header">
+        <h2>Everything in one place</h2>
+        <p>Keep your daily operations organized and easy to track.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+
+          <h3>Customer Management</h3>
+
+          <p>
+            Keep customer information organized and quickly access their orders
+            and details.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+
+          <h3>Order Management</h3>
+
+          <p>
+            Track orders from pending through processing, completion, and
+            delivery.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚚</div>
+
+          <h3>Delivery Tracking</h3>
+
+          <p>
+            Monitor orders as they move through the delivery workflow until they
+            reach the customer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>© 2026 Wasat Managerial. All rights reserved.</footer>
+  </body>
+</html>

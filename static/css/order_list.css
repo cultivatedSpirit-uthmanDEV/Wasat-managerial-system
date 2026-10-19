@@ -1,0 +1,463 @@
+ /* Page layout */
+
+  .search-btn:hover {
+    background-color: rgb(247, 232, 174);
+  }
+
+  .orders-page {
+    width: 100%;
+    min-width: 0;
+    color: var(--text-dark);
+  }
+
+  .orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 25px;
+  }
+
+  .page-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--terracotta);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+  }
+
+  .orders-header h1 {
+    margin: 0 0 8px;
+    color: var(--text-dark);
+    font-size: clamp(25px, 3vw, 32px);
+    font-weight: 750;
+    letter-spacing: -0.035em;
+  }
+
+  .orders-header p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .orders-header .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .plus-icon {
+    font-size: 21px;
+    line-height: 1;
+  }
+
+  /* Summary card */
+
+  .orders-summary {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 21px 24px;
+    margin-bottom: 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(43, 33, 24, 0.035);
+  }
+
+  .summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: var(--cream-dark);
+    color: var(--terracotta);
+    font-size: 27px;
+  }
+
+  .summary-label {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .orders-summary h2 {
+    margin: 3px 0;
+    color: var(--text-dark);
+    font-size: 27px;
+    line-height: 1.2;
+  }
+
+  .orders-summary p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  /* Table card */
+
+  .table-card {
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(43, 33, 24, 0.035);
+  }
+
+  .table-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 23px 25px 19px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-heading h2 {
+    margin: 0 0 5px;
+    color: var(--text-dark);
+    font-size: 17px;
+    font-weight: 750;
+  }
+
+  .table-heading p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .data-table th {
+    padding: 15px 18px;
+    background: var(--cream-dark);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 800;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 18px;
+    color: var(--text-dark);
+    font-size: 13px;
+    line-height: 1.6;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table tbody tr {
+    background: var(--white);
+    transition: background 0.15s ease;
+  }
+
+  .data-table tbody tr:hover {
+    background: #fcf8f3;
+  }
+
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Order and customer */
+
+  .order-number {
+    display: block;
+    color: var(--terracotta);
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .order-number:hover,
+  .customer-link:hover {
+    text-decoration: underline;
+  }
+
+  .order-caption {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+
+  .customer-link {
+    color: var(--text-dark);
+    font-weight: 650;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .description-cell {
+    min-width: 180px;
+    max-width: 260px;
+    color: var(--text-muted) !important;
+  }
+
+  .quantity-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    padding: 4px 8px;
+    border-radius: 7px;
+    background: var(--cream);
+    color: var(--text-dark);
+    font-weight: 750;
+  }
+
+  /* Workers */
+
+  .workers-cell {
+    min-width: 155px;
+    max-width: 220px;
+  }
+
+  .worker-name {
+    color: var(--text-dark);
+    font-weight: 550;
+  }
+
+  .worker-separator {
+    color: var(--text-muted);
+  }
+
+  .unassigned,
+  .muted-value {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  /* Status badges */
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* Colors correspond to the order status values */
+
+  .status-pending {
+    background: #fff4df;
+    border-color: #f1dfb9;
+    color: #946313;
+  }
+
+  .status-processing {
+    background: #eaf1ff;
+    border-color: #d5e2fb;
+    color: #365d9d;
+  }
+
+  .status-ready {
+    background: #e6f5e9;
+    border-color: #cce8d2;
+    color: #287343;
+  }
+
+  .status-out_for_delivery {
+    background: #f0eaff;
+    border-color: #dfd2fb;
+    color: #7045a5;
+  }
+
+  .status-partially_delivered {
+    background: #fff0e4;
+    border-color: #f5d7bd;
+    color: #a65b25;
+  }
+
+  .status-delivered {
+    background: #e5f5ed;
+    border-color: #c7e8d7;
+    color: #23744d;
+  }
+
+  .status-cancelled {
+    background: #fdeaea;
+    border-color: #f3d0d0;
+    color: #a43c3c;
+  }
+
+  /* Dates and action */
+
+  .date-cell {
+    min-width: 125px;
+    white-space: nowrap;
+  }
+
+  .action-heading,
+  .action-cell {
+    text-align: right !important;
+  }
+
+  .table-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--cream);
+    color: var(--terracotta) !important;
+    font-size: 12px;
+    font-weight: 750;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .table-action:hover {
+    background: var(--cream-dark);
+    border-color: #d9b6a4;
+  }
+
+  /* Table footer */
+
+  .table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 24px;
+    background: #fdfbf8;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  .table-footer strong {
+    color: var(--text-dark);
+  }
+
+  .footer-note {
+    letter-spacing: 0.04em;
+  }
+
+  /* Empty state */
+
+  .empty-state {
+    padding: 65px 25px;
+    text-align: center;
+  }
+
+  .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    border-radius: 18px;
+    background: var(--cream-dark);
+    color: var(--terracotta);
+    font-size: 31px;
+  }
+
+  .empty-state h3 {
+    margin: 0 0 9px;
+    color: var(--text-dark);
+    font-size: 20px;
+  }
+
+  .empty-state p {
+    max-width: 360px;
+    margin: 0 auto 23px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* Responsive layout */
+
+  @media (max-width: 900px) {
+    .data-table {
+      min-width: 1100px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .orders-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 17px;
+    }
+
+    .orders-header .btn {
+      width: 100%;
+    }
+
+    .orders-summary {
+      padding: 18px;
+      border-radius: 11px;
+    }
+
+    .table-card {
+      border-radius: 11px;
+    }
+
+    .table-heading {
+      padding: 19px 17px;
+    }
+
+    .data-table {
+      min-width: 1100px;
+    }
+
+    .data-table th {
+      padding: 13px 15px;
+      font-size: 10px;
+    }
+
+    .data-table td {
+      padding: 15px;
+      font-size: 12px;
+    }
+
+    .table-footer {
+      padding: 13px 16px;
+    }
+  }

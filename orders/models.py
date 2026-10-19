@@ -61,7 +61,6 @@ class Order(models.Model):
     expected_completion_date = models.DateField()
     assigned_workers = models.ManyToManyField(
         Worker,
-        null=True,
         blank=True,
         related_name="orders"
     )

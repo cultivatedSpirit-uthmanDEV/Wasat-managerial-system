@@ -1,5 +1,6 @@
-.venv
-__pycache__
 .env
-requirement.txt
+.venv/
+__pycache__/
+*.py[cod]
 staticfiles/
+media/

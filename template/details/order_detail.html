@@ -127,15 +127,15 @@
         </tr>
       </thead>
 
-      <tbody>
         {% for delivery in order.deliveries.all %}
-        <tr>
-          <td>
-            {% if delivery.delivery_date %} {{ delivery.delivery_date|date:"M d,
-            Y H:i" }} {% else %} — {% endif %}
-          </td>
-
-          <td>
+    <tr>
+        <td>
+            {% if delivery.delivery_date %}
+                {{ delivery.delivery_date|date:"M d, Y H:i" }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
             <strong>{{ delivery.quantity_delivered }}</strong>
           </td>
 

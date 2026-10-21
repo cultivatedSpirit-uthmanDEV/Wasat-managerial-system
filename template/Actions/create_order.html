@@ -221,12 +221,18 @@
 
 
 <!-- Choices.js is initialized only for a multiple-select worker field. -->
+
+<!-- Choices.js styling -->
 <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
 >
 
-<script src="{% static 'js/create_order.js' %}"></script>
+<!-- Load the Choices.js library FIRST -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<!-- Then load your own JavaScript -->
+<script src="{% static 'javascript/create_order.js' %}"></script>
 
 
 

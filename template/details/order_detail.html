@@ -126,6 +126,7 @@
           <th>Notes</th>
         </tr>
       </thead>
+      <tbody>
 
         {% for delivery in order.deliveries.all %}
     <tr>
@@ -136,6 +137,7 @@
                 —
             {% endif %}
         </td>
+        <td>
             <strong>{{ delivery.quantity_delivered }}</strong>
           </td>
 
@@ -144,11 +146,12 @@
           <td>{{ delivery.recipient|default:"—" }}</td>
 
           <td>{{ delivery.notes|default:"—" }}</td>
-        </tr>
+    </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+  </tbody>
 
   {% else %}
 

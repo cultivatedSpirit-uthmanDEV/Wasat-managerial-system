@@ -1,0 +1,168 @@
+{% extends "base.html" %} {% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/delivery_list.css' %}">
+
+<div class="deliveries-page">
+  <!-- Page Header -->
+  <div class="page-header deliveries-header">
+    <div>
+      <span class="page-eyebrow">ORDER MANAGEMENT</span>
+      <h1>Deliveries</h1>
+      <p>Track and manage deliveries for customer orders.</p>
+    </div>
+
+    <a href="{% url 'order-list' %}" class="btn btn-primary delivery-action">
+      <span class="action-icon">+</span>
+      Select Order to Deliver
+    </a>
+  </div>
+
+  <!-- Delivery List Card -->
+   
+  <form style="display: flex;
+  margin-bottom: 6px;" method="GET" action="{% url 'delivery-search' %}">
+    <input
+      style="width: 100%; height: 35px; border: none; border-radius: 2px"
+      type="search"
+      name="q"
+      value="{{ query }}"
+      placeholder="Search deliveries..."
+    />
+    <button style="width: 15%;
+    border: none;
+    background-color:  #f0e7e3 ;
+    border: none;
+    border-radius: 3px;"
+     type="submit">Search</button>
+  </form>
+  <div class="table-card deliveries-card">
+    <div class="table-card-header">
+      <form action=""></form>
+      <div>
+        <h2>All Deliveries</h2>
+        <p>Delivery records across your customer orders.</p>
+      </div>
+
+      {% if deliveries %}
+      <span class="record-count">
+        {{ deliveries|length }} 
+        {% if deliveries|length == 1 %} Record 
+        {% else%} 
+        Records 
+        {% endif %}
+      </span>
+      {% endif %}
+    </div>
+
+    {% if deliveries %}
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Order Details</th>
+            <th>Customer</th>
+            <th>Quantity</th>
+            <th>Delivery Date</th>
+            <th>Delivered By</th>
+            <th>Recipient</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for delivery in deliveries %}
+          <tr>
+            <!-- Order -->
+            <td>
+              <a
+                href="{% url 'order-detail' delivery.order.pk %}"
+                class="order-link"
+              >
+                {{ delivery.order.order_number }}
+              </a>
+              <span class="cell-caption"> View order details </span>
+            </td>
+
+            <!-- Customer -->
+            <td>
+              <span class="customer-name">
+                {{ delivery.order.customer.name }}
+              </span>
+            </td>
+
+            <!-- Quantity -->
+            <td>
+              <span class="quantity-badge">
+                {{ delivery.quantity_delivered }} units
+              </span>
+            </td>
+
+            <!-- Delivery Date -->
+            <td>
+              {% if delivery.delivery_date %}
+              <div class="date-cell">
+                <strong> {{ delivery.delivery_date|date:"M d, Y" }} </strong>
+                <span> {{ delivery.delivery_date|date:"H:i" }} </span>
+              </div>
+              {% else %}
+              <span class="muted-value"> Not scheduled </span>
+              {% endif %}
+            </td>
+
+            <!-- Delivered By -->
+            <td>
+              <span class="person-value">
+                {{ delivery.delivered_by|default:"—" }}
+              </span>
+            </td>
+
+            <!-- Recipient -->
+            <td>
+              <span class="person-value">
+                {{ delivery.recipient|default:"—" }}
+              </span>
+            </td>
+
+            <!-- Delivery Status -->
+            <td>
+              <span class="status-badge status-{{ delivery.order.status|lower }}">
+                {{ delivery.order.get_status_display }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <!-- Empty State -->
+    <div class="empty-state">
+      <div class="empty-state-icon">📦</div>
+
+      <h3>No deliveries yet</h3>
+
+      <p>
+        Delivery records will appear here when you record a delivery against an
+        order.
+      </p>
+
+      <a href="{% url 'order-list' %}" class="btn btn-primary delivery-action">
+        View Orders
+      </a>
+    </div>
+
+    {% endif %}
+  </div>
+</div>
+</style>
+
+{% endblock %}
+
+
+
+ 

@@ -1,198 +1,196 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
+{% load static %}
 
-<div class="page-header">
-    <div>
-        <h1>{{ customer.name }}</h1>
-        <p>Customer details and order history.</p>
+<link rel="stylesheet" href="{% static 'css/customer_detail.css' %}">
+
+<div class="customer-page">
+  <!-- Page heading -->
+  <header class="customer-header">
+    <div class="customer-heading">
+      <p class="customer-eyebrow">Customer Management</p>
+      <h1>{{ customer.name }}</h1>
+      <p>View customer information and track their order history.</p>
     </div>
 
-    <div class="page-header-actions">
-        <a href="{% url 'customer-list' %}" class="btn btn-secondary">
-            Back to Customers
-        </a>
+    <div class="customer-actions">
+      <a href="{% url 'customer-list' %}" class="btn btn-secondary">
+        ← Back to Customers
+      </a>
 
-        <a href="{% url 'create-order' %}" class="btn btn-primary">
-            Create Order
-        </a>
+      <a href="{% url 'create-order' %}" class="btn btn-primary">
+        + Create Order
+      </a>
     </div>
+  </header>
+
+  <!-- Customer overview -->
+  <div class="customer-overview">
+    <!-- Customer information -->
+    <section class="customer-card">
+      <div class="customer-card-header">
+        <h2>Customer Information</h2>
+        <p>Contact details and account information.</p>
+      </div>
+
+      <div class="customer-info-body">
+        <div class="customer-info-row">
+          <span class="customer-info-label">Full name</span>
+          <span class="customer-info-value">{{ customer.name }}</span>
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">Phone number</span>
+          <span class="customer-info-value"
+            >{{ customer.phone|default:"—" }}</span
+          >
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">WhatsApp number</span>
+          <span class="customer-info-value"
+            >{{ customer.whatsapp_num|default:"—" }}</span
+          >
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">Customer since</span>
+          <span class="customer-info-value">
+            {{ customer.created_at|date:"M d, Y"|default:"—" }}
+          </span>
+        </div>
+
+        <div class="customer-info-row">
+          <span class="customer-info-label">Last updated</span>
+          <span class="customer-info-value">
+            {{ customer.updated_at|date:"M d, Y · H:i"|default:"—" }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customer summary -->
+    <section class="customer-card">
+      <div class="customer-card-header">
+        <h2>Customer Summary</h2>
+        <p>A quick overview of this customer's activity.</p>
+      </div>
+
+      <div class="customer-summary-body">
+        <div class="customer-avatar" aria-hidden="true">
+          {{ customer.name|first|upper }}
+        </div>
+
+        <div class="customer-summary-label">Total orders placed</div>
+
+        <div class="customer-summary-number">{{ customer.orders.count }}</div>
+
+        <div class="customer-summary-caption">
+          Order{{ customer.orders.count|pluralize }} recorded for this customer.
+        </div>
+
+        <hr class="customer-summary-divider" />
+
+        <a href="{% url 'create-order' %}" class="customer-summary-link">
+          Create an order for this customer →
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Order history -->
+  <section class="customer-card order-history-card">
+    <div class="order-history-header">
+      <div>
+        <h2>Order History</h2>
+        <p>Review the orders associated with this customer.</p>
+      </div>
+
+      <span class="order-count">
+        {{ customer.orders.count }} order{{ customer.orders.count|pluralize }}
+      </span>
+    </div>
+
+    {% with orders=customer.orders.all %} {% if orders %}
+
+    <div class="customer-table-wrapper">
+      <table class="customer-table">
+        <thead>
+          <tr>
+            <th>Order Number</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Expected Completion</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>
+              <span class="order-number"> {{ order.order_number }} </span>
+            </td>
+
+            <td>
+              <div class="order-description">
+                {{ order.description|truncatechars:45 }}
+              </div>
+            </td>
+
+            <td>{{ order.quantity }}</td>
+
+            <td>
+              <span class="order-price"> {{ order.price }} </span>
+            </td>
+
+            <td>
+              <span class="status-badge status-{{ order.status|lower }}">
+                {{ order.get_status_display }}
+              </span>
+            </td>
+
+            <td>
+              <span class="order-date">
+                {{ order.expected_completion_date|date:"M d, Y"|default:"—" }}
+              </span>
+            </td>
+
+            <td>
+              <a
+                href="{% url 'order-detail' order.pk %}"
+                class="order-view-link"
+              >
+                View Order →
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <div class="customer-empty-state">
+      <div class="customer-empty-icon" aria-hidden="true">＋</div>
+
+      <h3>No orders yet</h3>
+
+      <p>
+        There are no orders for this customer yet. Create their first order to
+        start tracking production and delivery.
+      </p>
+
+      <a href="{% url 'create-order' %}" class="btn btn-primary">
+        Create First Order
+      </a>
+    </div>
+
+    {% endif %} {% endwith %}
+  </section>
 </div>
 
-
-<div class="detail-grid">
-
-    <!-- Customer Information -->
-        <div class="detail-card">
-
-            <div class="card-header">
-                <h2>Customer Information</h2>
-            </div>
-
-            <div class="detail-list">
-
-                <div class="detail-item">
-                    <b><span class="detail-label">Name: </span></b>
-                    <span class="detail-value">
-                        {{ customer.name }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <b><span class="detail-label">Phone: </span></b>
-                    <span class="detail-value">
-                        {{ customer.phone|default:"—" }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                   <b> <span class="detail-label">WhatsApp: </span></b>
-                    <span class="detail-value">
-                        {{ customer.whatsapp_num|default:"—" }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <b><span class="detail-label">Customer Since: </span></b>
-                    <span class="detail-value">
-                        {{ customer.created_at|date:"M d, Y" }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <b><span class="detail-label">Last Updated: </span></b>
-                    <span class="detail-value">
-                        {{ customer.updated_at|date:"M d, Y H:i" }}
-                    </span>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- Customer Summary -->
-        <div class="detail-card">
-
-            <div class="card-header">
-                <h2>Customer Summary</h2>
-            </div>
-
-            <div class="summary-stat">
-                <span class="summary-number">
-                    {{ customer.orders.count }}
-                </span>
-
-                <span class="summary-label">
-                    Total Orders
-                </span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- Order History -->
-    <div class="detail-card">
-
-        <div class="card-header">
-            <div>
-                <h2>Order History</h2>
-                <p>Orders placed by this customer.</p>
-            </div>
-        </div>
-
-
-        {% if customer.orders.all %}
-
-            <div class="table-wrapper">
-
-                <table class="data-table">
-
-                    <thead>
-                        <tr>
-                            <th>z</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Expected Completion</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {% for order in customer.orders.all %}
-
-                            <tr>
-
-                                <td>
-                                    <strong>
-                                        {{ order.order_number }}
-                                    </strong>
-                                </td>
-
-                                <td>
-                                    {{ order.description|truncatechars:45 }}
-                                </td>
-
-                                <td>
-                                    {{ order.quantity }}
-                                </td>
-
-                                <td>
-                                    {{ order.price }}
-                                </td>
-
-                                <td>
-                                    <span class="status-badge status-{{ order.status|lower }}">
-                                        {{ order.get_status_display }}
-                                    </span>
-                                </td>
-
-                                <td>
-                                    {{ order.expected_completion_date|date:"M d, Y" }}
-                                </td>
-
-                                <td>
-                                    <a
-                                        href="{% url 'order-detail' order.pk %}"
-                                        class="table-action"
-                                    >
-                                        View
-                                    </a>
-                                </td>
-
-                            </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        {% else %}
-
-            <div class="empty-state">
-
-                <h3>No orders yet</h3>
-
-                <p>
-                    This customer has not placed any orders.
-                </p>
-
-                <a href="{% url 'create-order' %}" class="btn btn-primary">
-                    Create First Order
-                </a>
-
-            </div>
-
-        {% endif %}
-
-</div>
-
-{% endblock %}
+{% endblock %} 

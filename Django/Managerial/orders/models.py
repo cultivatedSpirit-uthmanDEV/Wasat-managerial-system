@@ -61,7 +61,6 @@ class Order(models.Model):
     expected_completion_date = models.DateField()
     assigned_workers = models.ManyToManyField(
         Worker,
-        null=True,
         blank=True,
         related_name="orders"
     )
@@ -98,7 +97,7 @@ class Delivery(models.Model):
         related_name="deliveries",
         blank=True,
         null=True)
-    quantity_delivered = models.PositiveIntegerField(blank=True, null=True)
+    quantity_delivered = models.PositiveIntegerField()
     delivery_date = models.DateTimeField(null=True, blank=True)
     delivered_by = models.CharField(max_length=150, blank=True)
     recipient = models.CharField(max_length=150, blank=True)

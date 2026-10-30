@@ -44,6 +44,26 @@ urlpatterns = [
     # customer-list
 
      path('customer_list/', views.customer_list, name='customer-list'),
+
+     #create delivery
+     
+    path('create_delivery/<int:pk>/', views.create_delivery, name='create-delivery'),
+
+    path('delivery_list/', views.delivery_list, name='delivery-lists'),
+
+    #delivery search
+    path('delivery_search', views.search_delivery, name='delivery-search'),
+
+     #order search
+        path('order_search', views.search_order, name='order-search'),
+
+    #order search
+    path('customer_search', views.search_customer, name='customer-search'),
+
+     #order search
+        path('edit_order/<int:pk>/', views.update_order, name='edit-order')
+
+   
 ]
 
 

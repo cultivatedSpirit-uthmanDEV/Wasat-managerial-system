@@ -53,30 +53,39 @@ class DeliveryForm(forms.ModelForm):
         ]
 
 
-    widget = {
+        widgets = {
         "delivery_date" : forms.DateInput(
             attrs={'type' : 'date'}
         )
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, order=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.order = Order
+        self.order = order
 
-    def clean_quantity_delivered(self):
-        quantity = self.cleaned_data["quantity_delivered"]
+   
 
-        total_delivered = sum(
-            delivery.quantity_delivered
+    def get_total_delivered(self):
+        if self.order is None:
+            return 0
+
+        return sum(
+            delivery.quantity_delivered or 0
             for delivery in self.order.deliveries.all()
         )
+    def get_remaining_quantity(self):
 
-        remaining = self.order.quantity - total_delivered
+       return ( self.order.quantity - self.get_total_delivered())
 
-        if quantity > remaining:
-            raise forms.ValidationError(
+
+    def clean_quantity_delivered(self):
+            quantity = self.cleaned_data["quantity_delivered"]
+            remaining = self.get_remaining_quantity()
+
+            if quantity > remaining or quantity == 0:
+               raise forms.ValidationError(
                 f"Only {remaining} units remain to be delivered."
             )
 
-        return quantity
+            return quantity
         

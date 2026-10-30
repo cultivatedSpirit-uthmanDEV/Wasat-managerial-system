@@ -1,6 +1,20 @@
-.env
+# Python
 .venv/
+venv/
 __pycache__/
 *.py[cod]
+
+# Environment secrets
+.env
+.env.*
+
+# Django generated files
 staticfiles/
+*.sqlite3
+
+# Database backups
+*.dump
+*.sql
+
+# Media
 media/

@@ -9,7 +9,7 @@ __pycache__/
 .env.*
 
 # Django generated files
-staticfiles/
+# staticfiles/
 *.sqlite3
 
 # Database backups

@@ -1,13 +1,10 @@
-{% extends "base.html" %}
-{% block title %}
-Orders | Wasat Managerial 
-{% endblock %}
+{% extends "base.html" %} 
+{% block title %} 
+Orders | Wasat Managerial
+ {%endblock %}
+  {% block content %} {% load static %}
 
-{% block content %}
-
-{% load static %}
-
-<link rel="stylesheet" href="{% static 'css/order_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/order_list.css' %}" />
 
 <div class="orders-page">
   <!-- Page heading -->
@@ -30,7 +27,13 @@ Orders | Wasat Managerial
     action="{% url 'order-search' %}"
   >
     <input
-      style="width: 100%; height: 35px; border: none; border-radius: 2px; border : none"
+      style="
+        width: 100%;
+        height: 35px;
+        border: none;
+        border-radius: 2px;
+        border: none;
+      "
       type="search"
       name="q"
       value="{{ query }}"
@@ -92,6 +95,7 @@ Orders | Wasat Managerial
             <th>Expected Completion</th>
             <th>Date Created</th>
             <th class="action-heading">Action</th>
+            <th class="action-heading">Delete</th>
           </tr>
         </thead>
 
@@ -127,8 +131,7 @@ Orders | Wasat Managerial
               <span class="worker-name"> {{ worker.name }} </span>
               {% if not forloop.last %}
               <span class="worker-separator">, </span>
-              {% endif %}
-              {% empty %}
+              {% endif %} {% empty %}
               <span class="unassigned">Not assigned</span>
               {% endfor %}
             </td>
@@ -142,8 +145,7 @@ Orders | Wasat Managerial
 
             <td class="date-cell">
               {% if order.expected_completion_date %}
-               {{order.expected_completion_date|date:"M d, Y" }}
-              {% else %}
+              {{order.expected_completion_date|date:"M d, Y" }} {% else %}
               <span class="muted-value">Not set</span>
               {% endif %}
             </td>
@@ -153,6 +155,11 @@ Orders | Wasat Managerial
             <td class="action-cell">
               <a href="{% url 'order-detail' order.pk %}" class="table-action">
                 View <span aria-hidden="true">→</span>
+              </a>
+            </td>
+            <td class="action-cell">
+              <a href="{% url 'delete-order' order.pk %}" class="table-action">
+                Delete <span aria-hidden="true">→</span>
               </a>
             </td>
           </tr>
@@ -186,8 +193,6 @@ Orders | Wasat Managerial
   </div>
 </div>
 
-<style>
- 
-</style>
+<style></style>
 
 {% endblock %}

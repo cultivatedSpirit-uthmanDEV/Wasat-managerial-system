@@ -58,7 +58,21 @@ urlpatterns = [
         path('order_search', views.search_order, name='order-search'),
 
     #order search
-    path('customer_search', views.search_customer, name='customer-search')
+    path('customer_search', views.search_customer, name='customer-search'),
+
+    #update order
+
+    path('update_order/<int:pk>/', views.update_order, name='update-order'),
+    
+    # delete_order
+    path(
+    "delete-order/<int:pk>/",
+    views.delete_order,
+    name="delete-order"
+),
+    
+
+    
 
    
 ]

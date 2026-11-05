@@ -1,0 +1,52 @@
+ {% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/delete_order.css' %}"/>
+
+<div class="delete-container">
+
+    <div class="delete-card">
+
+        <div class="delete-icon">
+            !
+        </div>
+
+        <h2>Delete Order?</h2>
+
+        <p>
+            Are you sure you want to delete
+            <strong>{{ order.order_number }}</strong>?
+        </p>
+
+        <p class="warning-text">
+            This action cannot be undone. All associated records
+            that are configured to be deleted with this order
+            may also be removed.
+        </p>
+
+        <div class="order-info">
+            <p><strong>Customer:</strong> {{ order.customer }}</p>
+            <p><strong>Order Price:</strong> ₦{{ order.price|floatformat:2 }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="delete-actions">
+                <a href="{% url 'order-list' %}" class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit" class="delete-btn">
+                    Yes, Delete Order
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}

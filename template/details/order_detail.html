@@ -14,6 +14,10 @@
   <a href="{% url 'create-delivery' order.pk %}" class="btn btn-primary">
     Create Delivery
   </a>
+
+  <a href="{% url 'update-order' order.pk %}" class="btn btn-primary">
+    Edit Order
+</a>
   {% endif %}
 </div>
 
@@ -51,7 +55,19 @@
 
       <div class="detail-item">
         <span class="detail-label">Price</span>
-        <span class="detail-value">{{ order.price }}</span>
+        <span class="detail-value"> #{{ order.price }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Amount Deposited</span>
+        <span class="detail-value"> #{{ order.amount_paid}}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Payment Status</span>
+        <span class="detail-value"><strong>{{ order.payment_status}}</strong></span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Payment percentage</span>
+        <span class="detail-value"><strong>{{ order.payment_percentage }}%</strong></span>
       </div>
 
       <div class="detail-item">

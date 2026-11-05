@@ -11,6 +11,7 @@ class OrderForm(forms.ModelForm):
             "price",
             "expected_completion_date",
             "assigned_workers",
+            "amount_paid"
         ]
 
         widgets = {
@@ -25,6 +26,22 @@ class OrderForm(forms.ModelForm):
                 }
             ),
         }
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        price = cleaned_data.get("price")
+        amount_paid = cleaned_data.get("amount_paid")
+
+
+        if price is not None and amount_paid is not None:
+            if amount_paid > price:
+                self.add_error(
+                    "amount_paid",
+                    "Amount exceeds order price!"
+                )
+
+        return cleaned_data
 
 class CustomerForm(forms.ModelForm):
     class Meta:

@@ -497,14 +497,18 @@
             margin: 12px 0 25px;
         }
 
-        .form-actions {
-            flex-direction: column-reverse;
-            align-items: stretch;
-        }
+       .form-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+}
 
-        .form-actions .btn {
-            width: 100%;
-        }
+.form-actions .btn {
+    width: auto;
+    flex: 0 1 auto;
+}
     }
 
     @media (max-width: 400px) {

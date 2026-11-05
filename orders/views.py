@@ -89,14 +89,23 @@ def order_detail(request, pk):
 # CRUD for management
 
 def create_order(request):
-    if request.method == "POST":
 
+    if request.method == "POST":
         form = OrderForm(request.POST)
+
         if form.is_valid():
-            form.save()
+            order = form.save()
+
+            print("ORDER SAVED:", order.order_number)
+            print("Price:", order.price)
+            print("Amount Paid:", order.amount_paid)
+            print("Balance:", order.balance)
+            print("Payment Status:", order.payment_status)
+
             return redirect("order-list")
 
-        print("FORM ERRORS:", form.errors)
+        else:
+            print("FORM ERRORS:", form.errors)
 
     else:
         form = OrderForm()
@@ -106,6 +115,8 @@ def create_order(request):
         "Actions/create_order.html",
         {"form": form}
     )
+
+
 
 def create_worker(request):
     form = WorkerForm(request.POST or None)
@@ -118,6 +129,8 @@ def create_worker(request):
     }
 
     return render(request, 'Actions/create_worker.html', context)
+
+
 
 def create_customer(request):
     form =  CustomerForm(request.POST or None)
@@ -255,6 +268,55 @@ def search_customer(request):
         'query' : query,
         'customer' : customer
     })
+
+def update_order(request, pk):
+
+    order = get_object_or_404(Order, pk=pk)
+
+    if request.method == 'POST':
+
+        form = OrderForm(request.POST , instance=order)
+        if form.is_valid():
+           form.save()
+           return redirect("order-list")
+
+    else:
+        form = OrderForm(instance=order)
+
+    context = {
+        "form" : form,
+        "order" : order
+    }
+
+    return render(request, "update_order.html", context)
+
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
+
+from orders.models import Order
+
+
+def delete_order(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    if request.method == "POST":
+        order_number = order.order_number
+        order.delete()
+
+        messages.success(
+            request,
+            f"{order.customer.name}'s order of {order_number} was successfully deleted."
+        )
+
+        return redirect("order-list")
+
+    return render(
+        request,
+        "Actions/delete_order.html",
+        {"order": order}
+    )
+
+    
 
 
 

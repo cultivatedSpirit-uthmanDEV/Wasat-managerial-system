@@ -55,6 +55,26 @@ class Order(models.Model):
         related_name="orders"
     )
     price = models.DecimalField(max_digits=12,decimal_places=2,)
+    amount_paid = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    @property
+    def balance(self):
+        return self.price - self.amount_paid
+    @property
+    def payment_status(self):
+        if self.amount_paid < 0:
+            return "UNPAID"
+        elif self.amount_paid < self.price:
+            return "PARTIALLY PAID"
+        
+        return "FULLY PAID"
+    @property
+    def payment_percentage(self):
+        if self.price <= 0:
+            return 0
+        return (self.amount_paid/self.price) * 100
+
+
     description = models.TextField()
     quantity = models.PositiveIntegerField()
     date_ordered = models.DateTimeField(auto_now_add=True)

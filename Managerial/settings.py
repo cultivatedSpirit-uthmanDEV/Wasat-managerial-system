@@ -37,19 +37,27 @@ if not SECRET_KEY:
 
 
 ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "wasatmanagerialsystems.vercel.app",
+]
+
+ALLOWED_HOSTS += [
     host.strip()
-    for host in os.getenv(
-        "ALLOWED_HOSTS",
-        "localhost,127.0.0.1"
-    ).split(",")
+    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
     if host.strip()
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://wasatmanagerialsystems.vercel.app",
+]
+
+CSRF_TRUSTED_ORIGINS += [
     origin.strip()
     for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+
 
 STATIC_URL = "/static/"
 
